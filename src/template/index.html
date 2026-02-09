@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GBVM Benchmark</title>
+    <title>GB Flamegraph</title>
     <script type="application/json" id="speedscope-data">
       |SPEEDSCOPE_DATA|
     </script>
@@ -87,11 +87,13 @@
       #flame-graph > div {
         position: absolute;
         border: 1px solid #000;
+        color: #000;
         border-top: 0;
         height: 30px;
         box-sizing: border-box;
         font-size: 10px;
         padding: 2px;
+        line-height: 13px;
       }
       #flame-graph > div:hover {
         margin-top: -1px;
@@ -246,7 +248,11 @@
         }
         frameImgEl.src = capture.src;
 
-        frameNumEl.innerHTML = currentFrame;
+        // Display the actual frame number (handles startFrame offset)
+        frameNumEl.innerHTML =
+          capture.frameNumber !== undefined
+            ? capture.frameNumber
+            : currentFrame;
 
         const frameStart = capture.at;
         const frameEnd = data.captures[currentFrame + 1]?.at || Infinity;

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/gb-flamegraph.js",
-    "build:example": "node src/gb-flamegraph.js --rom ./examples/game.gb --input ./examples/input.json --export ./examples/report -f 120"
+    "build:example": "node src/gb-flamegraph.js --rom ./examples/game.gb --input ./examples/input.json --export ./examples/report -f 120",
+    "build:web": "esbuild web/js/app.js --bundle --outfile=web/js/bundle.js --format=esm",
+    "serve:web": "python3 -m http.server 8000 --directory web"
   },
   "bin": {
     "gb-flamegraph": "./src/gb-flamegraph.js"
@@ -15,5 +17,8 @@
   "dependencies": {
     "canvas": "^3.1.0",
     "commander": "^14.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.19.12"
   }
 }

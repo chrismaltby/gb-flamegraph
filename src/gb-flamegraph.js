@@ -4,9 +4,8 @@ const path = require("path");
 const { once } = require("events");
 const { program } = require("commander");
 const { createCanvas } = require("canvas");
-const GameboyJS = require("./gameboy");
-
-const CYCLES_PER_FRAME = 70256;
+const BenchmarkRunner = require("./core/benchmark");
+const { INTERRUPTS } = require("./core/noi-parser");
 
 program
   .name("gb-flamegraph")
@@ -15,8 +14,14 @@ program
   .option("-i, --input <inputfile>", "Path to the input file")
   .option("-e, --export <filename>", "Path to export results to")
   .option(
+    "-s, --start-frame <number>",
+    "Start frame for recording",
+    (value) => parseInt(value, 10),
+    0,
+  )
+  .option(
     "-f, --frames <number>",
-    "Number of frames to process",
+    "Number of frames to process after start frame",
     (value) => parseInt(value, 10),
     60,
   )
@@ -40,133 +45,41 @@ program
   .helpOption("-h, --help", "Display help for command")
   .parse(process.argv);
 
-const interrupts = [
-  {
-    addr: 0x40,
-    name: "VBL",
-    symbol: "[INTERRUPT] VBL",
-  },
-  {
-    addr: 0x48,
-    name: "LCD",
-    symbol: "[INTERRUPT] LCD",
-  },
-  {
-    addr: 0x50,
-    name: "TIM",
-    symbol: "[INTERRUPT] TIM",
-  },
-  {
-    addr: 0x58,
-    name: "SIO",
-    symbol: "[INTERRUPT] SIO",
-  },
-  {
-    addr: 0x60,
-    name: "JOY",
-    symbol: "[INTERRUPT] JOY",
-  },
-];
-
-const ignoreSymbols = [".add_VBL", ".add_int", "_display_off"];
-
-const parseNoi = (text) => {
-  const lines = text.split("\n");
-  const result = [];
-
-  for (var i = 0; i < interrupts.length; i++) {
-    const interrupt = interrupts[i];
-    result.push({
-      symbol: interrupt.symbol,
-      addr: interrupt.addr,
-      bank: 0,
-    });
-  }
-
-  const usedAddr = {};
-
-  for (const line of lines) {
-    if (!/^DEF (_|F|\..*ISR|\.remove_|\.add_|\.mod|\.div)/.test(line)) continue;
-    if (/_REG/.test(line)) continue;
-    if (/_rRAM/.test(line)) continue;
-    if (/_rROM/.test(line)) continue;
-    if (/_rMBC/.test(line)) continue;
-    if (/__start_save/.test(line)) continue;
-    if (/___bank_/.test(line)) continue;
-    if (/___func_/.test(line)) continue;
-    if (/___mute_mask_/.test(line)) continue;
-
-    const [, symbol, addrStr] = line.trim().split(/\s+/);
-    const fullAddr = parseInt(addrStr, 16);
-
-    const addr = fullAddr & 0xffff;
-    const bank = addr < 0x4000 ? 0 : (fullAddr >> 16) & 0xff;
-
-    const key = `b${bank}_${addr}`;
-
-    const symbolClean = symbol.replace(/^F([^$]+)\$/, "").replace(/\$.*/, "");
-
-    if (!usedAddr[key]) {
-      result.push({
-        symbol: symbolClean,
-        addr,
-        bank,
-      });
-      usedAddr[key] = true;
-    }
-  }
-
-  return result;
-};
-
-const generateFunctionRegions = (noiLookup) => {
-  const bankGroups = new Map();
-
-  // Group symbols by bank
-  for (const fn of noiLookup) {
-    const bank = fn.bank;
-    if (!bankGroups.has(bank)) {
-      bankGroups.set(bank, []);
-    }
-    bankGroups.get(bank).push({ ...fn });
-  }
-
-  const regions = [];
-
-  // For each bank, sort and assign end addresses
-  for (const [bank, symbols] of bankGroups.entries()) {
-    const addrMax = bank === 0 ? 0x3fff : 0x7fff;
-    const sorted = symbols.sort((a, b) => a.addr - b.addr);
-    for (let i = 0; i < sorted.length - 1; i++) {
-      sorted[i].end = Math.min(addrMax, sorted[i + 1].addr - 1);
-    }
-    sorted[sorted.length - 1].end = addrMax; // until end of bank
-    regions.push(...sorted);
-  }
-
-  return regions;
-};
-
 const options = program.opts();
 
-if (options.input) {
-  const inputFile = fs.readFileSync(options.input, "utf-8");
-  const inputJSON = JSON.parse(inputFile);
-  options.inputData = inputJSON;
+// Load ROM data
+const romData = fs.readFileSync(options.rom);
+
+// Load NOI data if available
+let noiData = null;
+try {
+  noiData = fs.readFileSync(options.rom.replace(/\.(gbc|gb)/i, ".noi"), "utf8");
+} catch (e) {
+  console.error("No .noi file found for ROM");
 }
 
+// Load input data if provided
+let inputData = null;
+if (options.input) {
+  const inputFile = fs.readFileSync(options.input, "utf-8");
+  inputData = JSON.parse(inputFile);
+}
+
+// Parse disabled interrupts
+const disabledInterrupts = [];
 if (options.disableInterrupts) {
   const disableList = options.disableInterrupts
     .split(",")
     .map((name) => name.trim().toUpperCase());
-  for (let i = 0; i < interrupts.length; i++) {
-    const interrupt = interrupts[i];
+  for (let i = 0; i < INTERRUPTS.length; i++) {
+    const interrupt = INTERRUPTS[i];
     if (disableList.includes(interrupt.name)) {
-      GameboyJS.DISABLED_INTERRUPTS.push(i);
+      disabledInterrupts.push(i);
     }
   }
 }
 
+// Setup export paths
 let exportPath = null;
 let capturePath = null;
 
@@ -180,426 +93,46 @@ if (options.export) {
   }
 }
 
-const canvas = createCanvas(160, 144);
-const gb = new GameboyJS.Gameboy(canvas);
-
-const romData = fs.readFileSync(options.rom);
-let noiLookup = [];
-let functionRegions = [];
-let regionsByBank = {};
-let noiIndex = {};
-
-let currentFnRegion;
-
-try {
-  const noiData = fs.readFileSync(
-    options.rom.replace(/\.(gbc|gb)/i, ".noi"),
-    "utf8",
-  );
-  noiLookup = parseNoi(noiData);
-  functionRegions = generateFunctionRegions(noiLookup);
-
-  for (const region of functionRegions) {
-    if (!regionsByBank[region.bank]) {
-      regionsByBank[region.bank] = [];
-    }
-    regionsByBank[region.bank].push(region);
-  }
-
-  for (let i = 0; i < noiLookup.length; i++) {
-    noiIndex[noiLookup[i].symbol] = i;
-  }
-} catch (e) {
-  console.error("No .noi file found for ROM");
-}
-
-const longestSymbolLength = Math.max(...noiLookup.map((f) => f.symbol.length));
-
-let framesElapsed = 0;
-
-let fnStack = [];
-let interruptStack = [];
-
-const speedscope = {
-  $schema: "https://www.speedscope.app/file-format-schema.json",
-  shared: {
-    frames: noiLookup.map((f) => ({ name: f.symbol })),
-  },
-  profiles: [
-    {
-      type: "evented",
-      name: "GBVM Trace",
-      unit: "frames",
-      startValue: 0,
-      endValue: 0,
-      events: [],
-    },
-  ],
-  captures: [],
-};
-
-const getCurrentFunctionRegion = (pc, bank) => {
-  // Check if still within current function
-  if (currentFnRegion) {
-    const fn = currentFnRegion;
-    if (pc >= fn.addr && pc <= fn.end) {
-      if (pc < 0x4000 || fn.bank === bank) {
-        return fn;
-      }
-    }
-  }
-  // Search for new function region based on bank
-  const targetBank = pc < 0x4000 ? 0 : bank;
-  const bankRegions = regionsByBank[targetBank];
-  if (!bankRegions) return undefined;
-  return bankRegions.find((fn) => pc >= fn.addr && pc <= fn.end);
-};
-
-const getGBTime = () => {
-  return gb.cpu.clock.c + framesElapsed * CYCLES_PER_FRAME;
-};
-
-const log = (...args) => {
-  if (options.verbose) {
-    console.log(...args);
-  }
-};
-
-const popInterrupts = () => {
-  if (interruptStack.length > 0) {
-    while (interruptStack.length > 0) {
-      const interrupted = interruptStack.pop();
-      if (interrupted) {
-        popFramesIncluding(interrupted);
-      }
-    }
-  }
-};
-
-const RETI = 0xd9;
-
-gb.cpu.onAfterInstruction = (opcode) => {
-  const pc = gb.cpu.r.pc;
-
-  if (opcode === RETI) {
-    // Return from interrupt
-    popInterrupts();
-    return;
-  }
-
-  const bank = gb.cpu.memory.mbc.romBankNumber;
-
-  const newFn = getCurrentFunctionRegion(pc, bank);
-
-  if (!newFn || newFn === currentFnRegion) {
-    return;
-  }
-
-  if (ignoreSymbols.includes(newFn.symbol)) {
-    return;
-  }
-
-  // Entering a new function at its start
-  if (newFn && pc === newFn.addr) {
-    pushFrame(newFn);
-    currentFnRegion = newFn;
-    return;
-  }
-
-  // Jumped to mid-function (if on stack already was probably a return)
-  if (newFn && pc !== newFn.addr) {
-    if (fnStackContains(newFn)) {
-      popFramesUntil(newFn);
-    } else {
-      if (interruptStack.length > 0) {
-        return;
-      }
-      if (pc >= 0x4000) {
-        // Needed to handle showing static functions when debugging is disabled
-        // While show wrong function name but better than nothing
-        pushFrame(newFn);
-      }
-    }
-    currentFnRegion = newFn;
-    return;
-  }
-
-  // Outside known function region
-  currentFnRegion = null;
-};
-
-gb.cpu.onInterrupt = (interrupt) => {
-  const clockNow = getGBTime();
-
-  popInterrupts();
-
-  interruptStack.push(interrupts[interrupt]);
-
-  fnStack.push({
-    symbol: interrupts[interrupt].symbol,
-    addr: interrupts[interrupt].addr,
-    clock: clockNow,
-    childPushed: false,
-    openPrinted: false,
-    indent: fnStack.length,
-  });
-
-  speedscope.profiles[0].events.push({
-    type: "O",
-    at: clockNow,
-    frame: noiIndex[interrupts[interrupt].symbol],
-  });
-};
-
-const pushFrame = (fn) => {
-  const clockNow = getGBTime();
-
-  const parent = fnStack[fnStack.length - 1];
-  if (parent) {
-    parent.childPushed = true;
-    if (!parent.openPrinted) {
-      const prefix = "|   ".repeat(Math.max(0, parent.indent));
-
-      log(`${prefix}+- ${parent.symbol}`);
-
-      parent.openPrinted = true;
-    }
-  }
-
-  fnStack.push({
-    symbol: fn.symbol,
-    addr: fn.addr,
-    clock: clockNow,
-    childPushed: false,
-    openPrinted: false,
-    indent: fnStack.length,
-  });
-
-  speedscope.profiles[0].events.push({
-    type: "O",
-    at: clockNow,
-    frame: noiIndex[fn.symbol],
-  });
-};
-
-const fnStackContains = (searchFn) => {
-  for (const fn of fnStack) {
-    if (fn.symbol === searchFn.symbol) {
-      return true;
-    }
-  }
-  return false;
-};
-
-const popFramesUntil = (fn) => {
-  const clockNow = getGBTime();
-
-  if (fn && !fnStackContains(fn)) {
-    return;
-  }
-
-  while (
-    fnStack.length > 0 &&
-    fnStack[fnStack.length - 1]?.symbol !== fn?.symbol
-  ) {
-    const poppedFn = fnStack.pop();
-    const cycles = clockNow - poppedFn.clock;
-
-    speedscope.profiles[0].events.push({
-      type: "C",
-      at: Math.max(clockNow, poppedFn.clock),
-      frame: noiIndex[poppedFn.symbol],
-      start: poppedFn.clock,
-    });
-
-    const prefix = "|   ".repeat(Math.max(0, poppedFn.indent));
-
-    if (poppedFn.childPushed) {
-      log(`${prefix}└- ${poppedFn.symbol} ${cycles}`);
-    } else {
-      log(`${prefix}└- ${poppedFn.symbol} ${cycles}`);
-    }
-  }
-};
-
-const popFramesIncluding = (fn) => {
-  const clockNow = getGBTime();
-
-  if (fn && !fnStackContains(fn)) {
-    return;
-  }
-
-  while (fnStack.length > 0) {
-    const poppedFn = fnStack.pop();
-    const cycles = clockNow - poppedFn.clock;
-
-    speedscope.profiles[0].events.push({
-      type: "C",
-      at: clockNow,
-      frame: noiIndex[poppedFn.symbol],
-      start: poppedFn.clock,
-    });
-
-    const prefix = "|   ".repeat(Math.max(0, poppedFn.indent));
-    log(`${prefix}└- ${poppedFn.symbol} ${cycles}`);
-
-    // Stop after popping the matching frame
-    if (poppedFn.symbol === fn?.symbol) {
-      break;
-    }
-  }
-};
-
-gb.cpu.isPaused = true;
-
-gb.startRom({ data: romData });
-
+// Save frame as PNG
 const saveFramePng = async (canvas, outPath) => {
-  if (!exportPath) return;
   const out = fs.createWriteStream(outPath);
   const stream = canvas.createPNGStream();
   stream.pipe(out);
   await once(out, "finish");
 };
 
-const eventsBetween = (events, start, end) => {
-  const stack = {};
-  const activeEvents = [];
-
-  // Match O/C pairs and track unclosed events
-  for (const event of events) {
-    const { type, at, frame } = event;
-
-    if (type === "O") {
-      if (!stack[frame]) stack[frame] = [];
-      stack[frame].push(at);
-    } else if (type === "C") {
-      if (stack[frame] && stack[frame].length > 0) {
-        const startTime = stack[frame].pop();
-        activeEvents.push({ start: startTime, end: at, frame });
-      }
-    }
-  }
-
-  // Any remaining opens in the stack are ongoing
-  for (const [frame, times] of Object.entries(stack)) {
-    for (const startTime of times) {
-      activeEvents.push({
-        start: startTime,
-        end: Infinity,
-        frame: parseInt(frame, 10),
-      });
-    }
-  }
-
-  // Filter to those overlapping the [start, end] range
-  return activeEvents.filter((ev) => ev.end > start && ev.start < end);
-};
-
-const logFrameReport = (start, end, frameIndex) => {
-  log("");
-  log(
-    "- FRAME",
-    frameIndex,
-    "REPORT -------------------------------------------------------",
-  );
-
-  const BAR_WIDTH = 30;
-  const events = eventsBetween(speedscope.profiles[0].events, start, end);
-
-  const frameMap = new Map();
-
-  for (const e of events) {
-    const frame = speedscope.shared.frames[e.frame];
-    const name = frame.name;
-    const duration = Math.min(e.end, end) - Math.max(e.start, start);
-
-    if (!frameMap.has(name)) {
-      frameMap.set(name, { name, duration: 0 });
-    }
-
-    frameMap.get(name).duration += duration;
-  }
-
-  const frameStats = [...frameMap.values()].sort(
-    (a, b) => b.duration - a.duration,
-  );
-
-  for (const { name, duration } of frameStats) {
-    const clampedDuration = Math.min(duration, CYCLES_PER_FRAME);
-    const filledLength = Math.round(
-      (clampedDuration / CYCLES_PER_FRAME) * BAR_WIDTH,
-    );
-    const bar = `|${"#".repeat(filledLength)}${"-".repeat(
-      BAR_WIDTH - filledLength,
-    )}| (${frameIndex})`;
-    const paddedName = name.padEnd(longestSymbolLength);
-    const durStr = String(duration).padStart(8);
-    log(`* ${paddedName} ${durStr} ${bar}`);
-  }
-
-  log(
-    "---------------------------------------------------------------------------",
-  );
-
-  log("");
-};
-
+// Main execution
 const main = async () => {
-  const numFrames = options.frames;
-  for (let i = 0; i < numFrames; i++) {
-    log(
-      "= FRAME",
-      i,
-      "==================================================================",
-    );
-    log("");
-    if (options.inputData) {
-      const frameInput = options.inputData.find((entry) => entry.frame === i);
-      if (frameInput) {
-        for (const key of frameInput.release || []) {
-          gb.input.releaseKey(key);
-        }
-        for (const key of frameInput.press || []) {
-          gb.input.pressKey(key);
-        }
+  const runner = new BenchmarkRunner({
+    romData,
+    noiData,
+    inputData,
+    createCanvas: (w, h) => createCanvas(w, h),
+    startFrame: options.startFrame,
+    frames: options.frames,
+    captureMode: options.capture,
+    verbose: options.verbose,
+    disabledInterrupts,
+    onFrameComplete: async (frameIndex, canvas) => {
+      if (!exportPath) return null;
+
+      if (options.capture === "all") {
+        const filename = `frame_${String(frameIndex).padStart(4, "0")}.png`;
+        const outPath = path.join(capturePath, filename);
+        await saveFramePng(canvas, outPath);
+        return { src: `captures/${filename}` };
+      } else if (options.capture === "exit") {
+        const outPath = path.join(exportPath, `final_frame.png`);
+        await saveFramePng(canvas, outPath);
+        return { src: `final_frame.png` };
       }
-    }
+      return null;
+    },
+  });
 
-    const frameStartTime = getGBTime();
+  const { speedscope } = await runner.run();
 
-    gb.cpu.frame();
-    framesElapsed++;
-
-    if (options.capture === "all" && exportPath) {
-      const filename = `frame_${String(i).padStart(4, "0")}.png`;
-      const outPath = path.join(capturePath, filename);
-      await saveFramePng(canvas, outPath);
-      speedscope.captures.push({
-        src: `captures/${filename}`,
-        at: frameStartTime,
-      });
-    } else if (
-      options.capture === "exit" &&
-      i === numFrames - 1 &&
-      exportPath
-    ) {
-      const outPath = path.join(exportPath, `final_frame.png`);
-      await saveFramePng(canvas, outPath);
-    }
-
-    logFrameReport(frameStartTime, getGBTime(), framesElapsed - 1);
-  }
-
-  popFramesUntil();
-  speedscope.profiles[0].endValue = Math.max(
-    ...speedscope.profiles[0].events
-      .filter((e) => e.type === "C")
-      .map((e) => e.at),
-  );
-
-  speedscope.profiles[0].events.sort((a, b) => a.at - b.at);
-
+  // Export results if export path specified
   if (exportPath) {
     const speedscopePath = path.join(exportPath, "speedscope.json");
     fs.writeFileSync(speedscopePath, JSON.stringify(speedscope, null, 4));

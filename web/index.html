@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GB Flamegraph - Web</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Upload Section -->
+      <div id="upload-section">
+        <div class="container">
+          <h1>GB Flamegraph</h1>
+          <p class="subtitle">
+            A tool for creating flame graphs from Game Boy ROMs
+          </p>
+
+          <div class="file-inputs">
+            <div class="file-drop-zone" id="rom-drop-zone">
+              <input
+                type="file"
+                id="rom-file"
+                accept=".gb,.gbc"
+                style="display: none"
+              />
+              <div class="drop-icon">👾</div>
+              <div class="drop-label">
+                ROM File<br />
+                <span class="file-hint">.gb or .gbc</span>
+              </div>
+              <div class="file-status" id="rom-status"></div>
+              <button
+                class="browse-btn"
+                onclick="document.getElementById('rom-file').click()"
+              >
+                Browse
+              </button>
+            </div>
+
+            <div class="file-drop-zone" id="noi-drop-zone">
+              <input
+                type="file"
+                id="noi-file"
+                accept=".noi"
+                style="display: none"
+              />
+              <div class="drop-icon">🗺️</div>
+              <div class="drop-label">
+                NOI File<br />
+                <span class="file-hint">.noi (memory map)</span>
+              </div>
+              <div class="file-status" id="noi-status"></div>
+              <button
+                class="browse-btn"
+                onclick="document.getElementById('noi-file').click()"
+              >
+                Browse
+              </button>
+            </div>
+
+            <div class="file-drop-zone optional" id="input-drop-zone">
+              <input
+                type="file"
+                id="input-file"
+                accept=".json"
+                style="display: none"
+              />
+              <div class="drop-icon">🎮</div>
+              <div class="drop-label">
+                Input File<br />
+                <span class="file-hint">Optional: .json</span>
+              </div>
+              <div class="file-status" id="input-status"></div>
+              <button
+                class="browse-btn"
+                onclick="document.getElementById('input-file').click()"
+              >
+                Browse
+              </button>
+            </div>
+          </div>
+
+          <div class="config-section">
+            <div class="config-grid">
+              <div class="config-item">
+                <label for="start-frame-input">Start Frame:</label>
+                <input
+                  type="number"
+                  id="start-frame-input"
+                  value="0"
+                  min="0"
+                  max="1000"
+                />
+              </div>
+              <div class="config-item">
+                <label for="frames-input">Frames to Process:</label>
+                <input
+                  type="number"
+                  id="frames-input"
+                  value="60"
+                  min="1"
+                  max="1000"
+                />
+              </div>
+            </div>
+          </div>
+
+          <button id="run-benchmark" class="run-btn" disabled>
+            Create Flamegraph
+          </button>
+
+          <div id="progress-section" style="display: none">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="progress-text" id="progress-text">
+              Processing frame 0 / 60...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div id="results-section" style="display: none">
+        <div class="results-header">
+          <h2>Results</h2>
+          <button id="back-btn" class="secondary-btn">← New Flamegraph</button>
+        </div>
+
+        <div id="frame">
+          <img id="frame-img" src="about:blank" alt="Game frame" />
+        </div>
+
+        <div id="timeline-scroll">
+          <div id="timeline"></div>
+        </div>
+
+        <div id="frame-info">
+          <div id="frame-header">
+            Frame&nbsp;<span id="frame-num">0</span>
+            <div class="flex-grow"></div>
+            <label for="toggle-interrupts">Show Interrupts</label>
+            <input type="checkbox" id="toggle-interrupts" checked />
+            &nbsp;
+            <input
+              id="flame-graph-size"
+              type="range"
+              min="0"
+              max="100"
+              value="0"
+            />
+          </div>
+          <div id="flame-graph-scroll">
+            <div id="flame-graph"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/bundle.js"></script>
+  </body>
+</html>

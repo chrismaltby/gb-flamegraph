@@ -46,8 +46,11 @@ Optionally you can run without installing using npx
 - `-e, --export <folder>`  
   Output directory for results
 
+- `-s, --start-frame <number>`  
+  Start frame for recording (default: `0`). Frames before this are processed but not recorded in output
+
 - `-f, --frames <number>`  
-  Number of frames to process (default: `60`)
+  Number of frames to process after start frame (default: `60`)
 
 - `-c, --capture <mode>`  
   Frame capture mode:
