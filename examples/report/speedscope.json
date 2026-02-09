@@ -16828,6 +16828,11 @@
                     "frame": 63
                 },
                 {
+                    "type": "O",
+                    "at": 1759184,
+                    "frame": 1
+                },
+                {
                     "type": "C",
                     "at": 1759184,
                     "frame": 63,
@@ -16850,11 +16855,6 @@
                     "at": 1759184,
                     "frame": 2,
                     "start": 1757908
-                },
-                {
-                    "type": "O",
-                    "at": 1759184,
-                    "frame": 1
                 },
                 {
                     "type": "O",
@@ -17114,6 +17114,11 @@
                     "frame": 63
                 },
                 {
+                    "type": "O",
+                    "at": 1826764,
+                    "frame": 0
+                },
+                {
                     "type": "C",
                     "at": 1826764,
                     "frame": 63,
@@ -17136,11 +17141,6 @@
                     "at": 1826764,
                     "frame": 2,
                     "start": 1823528
-                },
-                {
-                    "type": "O",
-                    "at": 1826764,
-                    "frame": 0
                 },
                 {
                     "type": "O",
@@ -25515,6 +25515,11 @@
                     "frame": 63
                 },
                 {
+                    "type": "O",
+                    "at": 2742768,
+                    "frame": 1
+                },
+                {
                     "type": "C",
                     "at": 2742768,
                     "frame": 63,
@@ -25537,11 +25542,6 @@
                     "at": 2742768,
                     "frame": 2,
                     "start": 2741492
-                },
-                {
-                    "type": "O",
-                    "at": 2742768,
-                    "frame": 1
                 },
                 {
                     "type": "O",
@@ -26197,6 +26197,11 @@
                     "frame": 63
                 },
                 {
+                    "type": "O",
+                    "at": 2810348,
+                    "frame": 0
+                },
+                {
                     "type": "C",
                     "at": 2810348,
                     "frame": 63,
@@ -26219,11 +26224,6 @@
                     "at": 2810348,
                     "frame": 2,
                     "start": 2807016
-                },
-                {
-                    "type": "O",
-                    "at": 2810348,
-                    "frame": 0
                 },
                 {
                     "type": "O",
@@ -35800,6 +35800,11 @@
                     "frame": 63
                 },
                 {
+                    "type": "O",
+                    "at": 3726348,
+                    "frame": 1
+                },
+                {
                     "type": "C",
                     "at": 3726348,
                     "frame": 63,
@@ -35822,11 +35827,6 @@
                     "at": 3726348,
                     "frame": 2,
                     "start": 3725076
-                },
-                {
-                    "type": "O",
-                    "at": 3726348,
-                    "frame": 1
                 },
                 {
                     "type": "O",
@@ -46303,6 +46303,11 @@
                     "frame": 63
                 },
                 {
+                    "type": "O",
+                    "at": 4709916,
+                    "frame": 1
+                },
+                {
                     "type": "C",
                     "at": 4709916,
                     "frame": 63,
@@ -46325,11 +46330,6 @@
                     "at": 4709916,
                     "frame": 2,
                     "start": 4708660
-                },
-                {
-                    "type": "O",
-                    "at": 4709916,
-                    "frame": 1
                 },
                 {
                     "type": "O",
@@ -56865,6 +56865,11 @@
                     "frame": 63
                 },
                 {
+                    "type": "O",
+                    "at": 5693512,
+                    "frame": 1
+                },
+                {
                     "type": "C",
                     "at": 5693512,
                     "frame": 63,
@@ -56887,11 +56892,6 @@
                     "at": 5693512,
                     "frame": 2,
                     "start": 5692244
-                },
-                {
-                    "type": "O",
-                    "at": 5693512,
-                    "frame": 1
                 },
                 {
                     "type": "O",
@@ -67766,6 +67766,11 @@
                     "frame": 63
                 },
                 {
+                    "type": "O",
+                    "at": 6677100,
+                    "frame": 1
+                },
+                {
                     "type": "C",
                     "at": 6677100,
                     "frame": 63,
@@ -67788,11 +67793,6 @@
                     "at": 6677100,
                     "frame": 2,
                     "start": 6675828
-                },
-                {
-                    "type": "O",
-                    "at": 6677100,
-                    "frame": 1
                 },
                 {
                     "type": "O",
@@ -78711,6 +78711,11 @@
                     "frame": 63
                 },
                 {
+                    "type": "O",
+                    "at": 7660684,
+                    "frame": 1
+                },
+                {
                     "type": "C",
                     "at": 7660684,
                     "frame": 63,
@@ -78733,11 +78738,6 @@
                     "at": 7660684,
                     "frame": 2,
                     "start": 7659412
-                },
-                {
-                    "type": "O",
-                    "at": 7660684,
-                    "frame": 1
                 },
                 {
                     "type": "O",
@@ -88087,483 +88087,603 @@
     "captures": [
         {
             "src": "captures/frame_0000.png",
-            "at": 0
+            "at": 0,
+            "frameNumber": 0
         },
         {
             "src": "captures/frame_0001.png",
-            "at": 70256
+            "at": 70256,
+            "frameNumber": 1
         },
         {
             "src": "captures/frame_0002.png",
-            "at": 140512
+            "at": 140512,
+            "frameNumber": 2
         },
         {
             "src": "captures/frame_0003.png",
-            "at": 210768
+            "at": 210768,
+            "frameNumber": 3
         },
         {
             "src": "captures/frame_0004.png",
-            "at": 281024
+            "at": 281024,
+            "frameNumber": 4
         },
         {
             "src": "captures/frame_0005.png",
-            "at": 351280
+            "at": 351280,
+            "frameNumber": 5
         },
         {
             "src": "captures/frame_0006.png",
-            "at": 421536
+            "at": 421536,
+            "frameNumber": 6
         },
         {
             "src": "captures/frame_0007.png",
-            "at": 491792
+            "at": 491792,
+            "frameNumber": 7
         },
         {
             "src": "captures/frame_0008.png",
-            "at": 562048
+            "at": 562048,
+            "frameNumber": 8
         },
         {
             "src": "captures/frame_0009.png",
-            "at": 632304
+            "at": 632304,
+            "frameNumber": 9
         },
         {
             "src": "captures/frame_0010.png",
-            "at": 702560
+            "at": 702560,
+            "frameNumber": 10
         },
         {
             "src": "captures/frame_0011.png",
-            "at": 772816
+            "at": 772816,
+            "frameNumber": 11
         },
         {
             "src": "captures/frame_0012.png",
-            "at": 843072
+            "at": 843072,
+            "frameNumber": 12
         },
         {
             "src": "captures/frame_0013.png",
-            "at": 913328
+            "at": 913328,
+            "frameNumber": 13
         },
         {
             "src": "captures/frame_0014.png",
-            "at": 983584
+            "at": 983584,
+            "frameNumber": 14
         },
         {
             "src": "captures/frame_0015.png",
-            "at": 1053840
+            "at": 1053840,
+            "frameNumber": 15
         },
         {
             "src": "captures/frame_0016.png",
-            "at": 1124096
+            "at": 1124096,
+            "frameNumber": 16
         },
         {
             "src": "captures/frame_0017.png",
-            "at": 1194352
+            "at": 1194352,
+            "frameNumber": 17
         },
         {
             "src": "captures/frame_0018.png",
-            "at": 1264608
+            "at": 1264608,
+            "frameNumber": 18
         },
         {
             "src": "captures/frame_0019.png",
-            "at": 1334864
+            "at": 1334864,
+            "frameNumber": 19
         },
         {
             "src": "captures/frame_0020.png",
-            "at": 1405120
+            "at": 1405120,
+            "frameNumber": 20
         },
         {
             "src": "captures/frame_0021.png",
-            "at": 1475376
+            "at": 1475376,
+            "frameNumber": 21
         },
         {
             "src": "captures/frame_0022.png",
-            "at": 1545632
+            "at": 1545632,
+            "frameNumber": 22
         },
         {
             "src": "captures/frame_0023.png",
-            "at": 1615888
+            "at": 1615888,
+            "frameNumber": 23
         },
         {
             "src": "captures/frame_0024.png",
-            "at": 1686144
+            "at": 1686144,
+            "frameNumber": 24
         },
         {
             "src": "captures/frame_0025.png",
-            "at": 1756400
+            "at": 1756400,
+            "frameNumber": 25
         },
         {
             "src": "captures/frame_0026.png",
-            "at": 1826656
+            "at": 1826656,
+            "frameNumber": 26
         },
         {
             "src": "captures/frame_0027.png",
-            "at": 1896912
+            "at": 1896912,
+            "frameNumber": 27
         },
         {
             "src": "captures/frame_0028.png",
-            "at": 1967168
+            "at": 1967168,
+            "frameNumber": 28
         },
         {
             "src": "captures/frame_0029.png",
-            "at": 2037424
+            "at": 2037424,
+            "frameNumber": 29
         },
         {
             "src": "captures/frame_0030.png",
-            "at": 2107680
+            "at": 2107680,
+            "frameNumber": 30
         },
         {
             "src": "captures/frame_0031.png",
-            "at": 2177936
+            "at": 2177936,
+            "frameNumber": 31
         },
         {
             "src": "captures/frame_0032.png",
-            "at": 2248192
+            "at": 2248192,
+            "frameNumber": 32
         },
         {
             "src": "captures/frame_0033.png",
-            "at": 2318448
+            "at": 2318448,
+            "frameNumber": 33
         },
         {
             "src": "captures/frame_0034.png",
-            "at": 2388704
+            "at": 2388704,
+            "frameNumber": 34
         },
         {
             "src": "captures/frame_0035.png",
-            "at": 2458960
+            "at": 2458960,
+            "frameNumber": 35
         },
         {
             "src": "captures/frame_0036.png",
-            "at": 2529216
+            "at": 2529216,
+            "frameNumber": 36
         },
         {
             "src": "captures/frame_0037.png",
-            "at": 2599472
+            "at": 2599472,
+            "frameNumber": 37
         },
         {
             "src": "captures/frame_0038.png",
-            "at": 2669728
+            "at": 2669728,
+            "frameNumber": 38
         },
         {
             "src": "captures/frame_0039.png",
-            "at": 2739984
+            "at": 2739984,
+            "frameNumber": 39
         },
         {
             "src": "captures/frame_0040.png",
-            "at": 2810240
+            "at": 2810240,
+            "frameNumber": 40
         },
         {
             "src": "captures/frame_0041.png",
-            "at": 2880496
+            "at": 2880496,
+            "frameNumber": 41
         },
         {
             "src": "captures/frame_0042.png",
-            "at": 2950752
+            "at": 2950752,
+            "frameNumber": 42
         },
         {
             "src": "captures/frame_0043.png",
-            "at": 3021008
+            "at": 3021008,
+            "frameNumber": 43
         },
         {
             "src": "captures/frame_0044.png",
-            "at": 3091264
+            "at": 3091264,
+            "frameNumber": 44
         },
         {
             "src": "captures/frame_0045.png",
-            "at": 3161520
+            "at": 3161520,
+            "frameNumber": 45
         },
         {
             "src": "captures/frame_0046.png",
-            "at": 3231776
+            "at": 3231776,
+            "frameNumber": 46
         },
         {
             "src": "captures/frame_0047.png",
-            "at": 3302032
+            "at": 3302032,
+            "frameNumber": 47
         },
         {
             "src": "captures/frame_0048.png",
-            "at": 3372288
+            "at": 3372288,
+            "frameNumber": 48
         },
         {
             "src": "captures/frame_0049.png",
-            "at": 3442544
+            "at": 3442544,
+            "frameNumber": 49
         },
         {
             "src": "captures/frame_0050.png",
-            "at": 3512800
+            "at": 3512800,
+            "frameNumber": 50
         },
         {
             "src": "captures/frame_0051.png",
-            "at": 3583056
+            "at": 3583056,
+            "frameNumber": 51
         },
         {
             "src": "captures/frame_0052.png",
-            "at": 3653312
+            "at": 3653312,
+            "frameNumber": 52
         },
         {
             "src": "captures/frame_0053.png",
-            "at": 3723568
+            "at": 3723568,
+            "frameNumber": 53
         },
         {
             "src": "captures/frame_0054.png",
-            "at": 3793824
+            "at": 3793824,
+            "frameNumber": 54
         },
         {
             "src": "captures/frame_0055.png",
-            "at": 3864080
+            "at": 3864080,
+            "frameNumber": 55
         },
         {
             "src": "captures/frame_0056.png",
-            "at": 3934336
+            "at": 3934336,
+            "frameNumber": 56
         },
         {
             "src": "captures/frame_0057.png",
-            "at": 4004592
+            "at": 4004592,
+            "frameNumber": 57
         },
         {
             "src": "captures/frame_0058.png",
-            "at": 4074848
+            "at": 4074848,
+            "frameNumber": 58
         },
         {
             "src": "captures/frame_0059.png",
-            "at": 4145104
+            "at": 4145104,
+            "frameNumber": 59
         },
         {
             "src": "captures/frame_0060.png",
-            "at": 4215360
+            "at": 4215360,
+            "frameNumber": 60
         },
         {
             "src": "captures/frame_0061.png",
-            "at": 4285616
+            "at": 4285616,
+            "frameNumber": 61
         },
         {
             "src": "captures/frame_0062.png",
-            "at": 4355872
+            "at": 4355872,
+            "frameNumber": 62
         },
         {
             "src": "captures/frame_0063.png",
-            "at": 4426128
+            "at": 4426128,
+            "frameNumber": 63
         },
         {
             "src": "captures/frame_0064.png",
-            "at": 4496384
+            "at": 4496384,
+            "frameNumber": 64
         },
         {
             "src": "captures/frame_0065.png",
-            "at": 4566640
+            "at": 4566640,
+            "frameNumber": 65
         },
         {
             "src": "captures/frame_0066.png",
-            "at": 4636896
+            "at": 4636896,
+            "frameNumber": 66
         },
         {
             "src": "captures/frame_0067.png",
-            "at": 4707152
+            "at": 4707152,
+            "frameNumber": 67
         },
         {
             "src": "captures/frame_0068.png",
-            "at": 4777408
+            "at": 4777408,
+            "frameNumber": 68
         },
         {
             "src": "captures/frame_0069.png",
-            "at": 4847664
+            "at": 4847664,
+            "frameNumber": 69
         },
         {
             "src": "captures/frame_0070.png",
-            "at": 4917920
+            "at": 4917920,
+            "frameNumber": 70
         },
         {
             "src": "captures/frame_0071.png",
-            "at": 4988176
+            "at": 4988176,
+            "frameNumber": 71
         },
         {
             "src": "captures/frame_0072.png",
-            "at": 5058432
+            "at": 5058432,
+            "frameNumber": 72
         },
         {
             "src": "captures/frame_0073.png",
-            "at": 5128688
+            "at": 5128688,
+            "frameNumber": 73
         },
         {
             "src": "captures/frame_0074.png",
-            "at": 5198944
+            "at": 5198944,
+            "frameNumber": 74
         },
         {
             "src": "captures/frame_0075.png",
-            "at": 5269200
+            "at": 5269200,
+            "frameNumber": 75
         },
         {
             "src": "captures/frame_0076.png",
-            "at": 5339456
+            "at": 5339456,
+            "frameNumber": 76
         },
         {
             "src": "captures/frame_0077.png",
-            "at": 5409712
+            "at": 5409712,
+            "frameNumber": 77
         },
         {
             "src": "captures/frame_0078.png",
-            "at": 5479968
+            "at": 5479968,
+            "frameNumber": 78
         },
         {
             "src": "captures/frame_0079.png",
-            "at": 5550224
+            "at": 5550224,
+            "frameNumber": 79
         },
         {
             "src": "captures/frame_0080.png",
-            "at": 5620480
+            "at": 5620480,
+            "frameNumber": 80
         },
         {
             "src": "captures/frame_0081.png",
-            "at": 5690736
+            "at": 5690736,
+            "frameNumber": 81
         },
         {
             "src": "captures/frame_0082.png",
-            "at": 5760992
+            "at": 5760992,
+            "frameNumber": 82
         },
         {
             "src": "captures/frame_0083.png",
-            "at": 5831248
+            "at": 5831248,
+            "frameNumber": 83
         },
         {
             "src": "captures/frame_0084.png",
-            "at": 5901504
+            "at": 5901504,
+            "frameNumber": 84
         },
         {
             "src": "captures/frame_0085.png",
-            "at": 5971760
+            "at": 5971760,
+            "frameNumber": 85
         },
         {
             "src": "captures/frame_0086.png",
-            "at": 6042016
+            "at": 6042016,
+            "frameNumber": 86
         },
         {
             "src": "captures/frame_0087.png",
-            "at": 6112272
+            "at": 6112272,
+            "frameNumber": 87
         },
         {
             "src": "captures/frame_0088.png",
-            "at": 6182528
+            "at": 6182528,
+            "frameNumber": 88
         },
         {
             "src": "captures/frame_0089.png",
-            "at": 6252784
+            "at": 6252784,
+            "frameNumber": 89
         },
         {
             "src": "captures/frame_0090.png",
-            "at": 6323040
+            "at": 6323040,
+            "frameNumber": 90
         },
         {
             "src": "captures/frame_0091.png",
-            "at": 6393296
+            "at": 6393296,
+            "frameNumber": 91
         },
         {
             "src": "captures/frame_0092.png",
-            "at": 6463552
+            "at": 6463552,
+            "frameNumber": 92
         },
         {
             "src": "captures/frame_0093.png",
-            "at": 6533808
+            "at": 6533808,
+            "frameNumber": 93
         },
         {
             "src": "captures/frame_0094.png",
-            "at": 6604064
+            "at": 6604064,
+            "frameNumber": 94
         },
         {
             "src": "captures/frame_0095.png",
-            "at": 6674320
+            "at": 6674320,
+            "frameNumber": 95
         },
         {
             "src": "captures/frame_0096.png",
-            "at": 6744576
+            "at": 6744576,
+            "frameNumber": 96
         },
         {
             "src": "captures/frame_0097.png",
-            "at": 6814832
+            "at": 6814832,
+            "frameNumber": 97
         },
         {
             "src": "captures/frame_0098.png",
-            "at": 6885088
+            "at": 6885088,
+            "frameNumber": 98
         },
         {
             "src": "captures/frame_0099.png",
-            "at": 6955344
+            "at": 6955344,
+            "frameNumber": 99
         },
         {
             "src": "captures/frame_0100.png",
-            "at": 7025600
+            "at": 7025600,
+            "frameNumber": 100
         },
         {
             "src": "captures/frame_0101.png",
-            "at": 7095856
+            "at": 7095856,
+            "frameNumber": 101
         },
         {
             "src": "captures/frame_0102.png",
-            "at": 7166112
+            "at": 7166112,
+            "frameNumber": 102
         },
         {
             "src": "captures/frame_0103.png",
-            "at": 7236368
+            "at": 7236368,
+            "frameNumber": 103
         },
         {
             "src": "captures/frame_0104.png",
-            "at": 7306624
+            "at": 7306624,
+            "frameNumber": 104
         },
         {
             "src": "captures/frame_0105.png",
-            "at": 7376880
+            "at": 7376880,
+            "frameNumber": 105
         },
         {
             "src": "captures/frame_0106.png",
-            "at": 7447136
+            "at": 7447136,
+            "frameNumber": 106
         },
         {
             "src": "captures/frame_0107.png",
-            "at": 7517392
+            "at": 7517392,
+            "frameNumber": 107
         },
         {
             "src": "captures/frame_0108.png",
-            "at": 7587648
+            "at": 7587648,
+            "frameNumber": 108
         },
         {
             "src": "captures/frame_0109.png",
-            "at": 7657904
+            "at": 7657904,
+            "frameNumber": 109
         },
         {
             "src": "captures/frame_0110.png",
-            "at": 7728160
+            "at": 7728160,
+            "frameNumber": 110
         },
         {
             "src": "captures/frame_0111.png",
-            "at": 7798416
+            "at": 7798416,
+            "frameNumber": 111
         },
         {
             "src": "captures/frame_0112.png",
-            "at": 7868672
+            "at": 7868672,
+            "frameNumber": 112
         },
         {
             "src": "captures/frame_0113.png",
-            "at": 7938928
+            "at": 7938928,
+            "frameNumber": 113
         },
         {
             "src": "captures/frame_0114.png",
-            "at": 8009184
+            "at": 8009184,
+            "frameNumber": 114
         },
         {
             "src": "captures/frame_0115.png",
-            "at": 8079440
+            "at": 8079440,
+            "frameNumber": 115
         },
         {
             "src": "captures/frame_0116.png",
-            "at": 8149696
+            "at": 8149696,
+            "frameNumber": 116
         },
         {
             "src": "captures/frame_0117.png",
-            "at": 8219952
+            "at": 8219952,
+            "frameNumber": 117
         },
         {
             "src": "captures/frame_0118.png",
-            "at": 8290208
+            "at": 8290208,
+            "frameNumber": 118
         },
         {
             "src": "captures/frame_0119.png",
-            "at": 8360464
+            "at": 8360464,
+            "frameNumber": 119
         }
     ]
 }
