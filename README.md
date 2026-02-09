@@ -1,10 +1,10 @@
-# gbvm-benchmark
+# gb-flamegraph
 
-Copyright (c) 2025 Chris Maltby, released under the [MIT license](https://opensource.org/licenses/MIT).
+Copyright (c) 2026 Chris Maltby, released under the [MIT license](https://opensource.org/licenses/MIT).
 
-A CLI tool for benchmarking and profiling games built with [GBVM](https://github.com/chrismaltby/gbvm) and, by extension, [GB Studio](https://github.com/chrismaltby/gb-studio).
+A tool for creating flame graphs from Game Boy ROMs.
 
-This tool simulates a ROM frame-by-frame, recording function call timings and generating a [Speedscope](https://www.speedscope.app)-compatible JSON trace. Optionally, it can capture screenshots per frame and generate a HTML report (example in [examples/report](https://chrismaltby.github.io/gbvm-benchmark-js/examples/report)).
+This tool simulates a ROM frame-by-frame, recording function call timings and generating a [Speedscope](https://www.speedscope.app)-compatible JSON trace. Optionally, it can capture screenshots per frame and generate a HTML report (example in [examples/report](https://chrismaltby.github.io/gb-flamegraph/examples/report)).
 
 The emulation is handled by a modified version of [Gameboy.js
 ](https://github.com/juchi/gameboy.js/).
@@ -16,7 +16,7 @@ Likely doesn't work for GBC-only games right now.
 - Install [NodeJS](https://nodejs.org/) (required version is given in [.nvmrc](.nvmrc))
 
 ```bash
-> cd gbvm-benchmark-js
+> cd gb-flamegraph
 > corepack enable
 > yarn
 ```
@@ -24,13 +24,13 @@ Likely doesn't work for GBC-only games right now.
 ## Usage
 
 ```bash
-> node src/gbvm-benchmark.js -r path/to/game.gb [options]
+> node src/gb-flamegraph.js -r path/to/game.gb [options]
 ```
 
 Optionally you can run without installing using npx
 
 ```bash
-> npx https://github.com/chrismaltby/gbvm-benchmark-js.git -r path/to/game.gb [options]
+> npx https://github.com/chrismaltby/gb-flamegraph.git -r path/to/game.gb [options]
 ```
 
 ### Required
@@ -51,7 +51,6 @@ Optionally you can run without installing using npx
 
 - `-c, --capture <mode>`  
   Frame capture mode:
-
   - `all`: Capture a PNG for every frame (default)
   - `exit`: Capture a PNG on the last frame only
   - `none`: Do not capture any frames
@@ -84,7 +83,7 @@ If `--export` is set, the following will be saved:
 ## Example
 
 ```bash
-> node src/gbvm-benchmark.js -r examples/game.gb -i examples/input.json -f 200 -v
+> node src/gb-flamegraph.js -r examples/game.gb -i examples/input.json -f 200 -v
 ```
 
 ## Visualizing Flamegraphs

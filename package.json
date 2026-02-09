@@ -1,14 +1,14 @@
 {
-  "name": "gbvm-benchmark",
+  "name": "gb-flamegraph",
   "version": "1.0.0",
-  "description": "A CLI tool for benchmarking and profiling games built with GBVM",
+  "description": "A tool for creating flame graphs from Game Boy ROMs",
   "main": "index.js",
   "scripts": {
-    "start": "node src/gbvm-benchmark.js",
-    "build:example": "node src/gbvm-benchmark.js --rom ./examples/game.gb --input ./examples/input.json --export ./examples/report -f 120"
+    "start": "node src/gb-flamegraph.js",
+    "build:example": "node src/gb-flamegraph.js --rom ./examples/game.gb --input ./examples/input.json --export ./examples/report -f 120"
   },
   "bin": {
-    "gbvm-benchmark": "./src/gbvm-benchmark.js"
+    "gb-flamegraph": "./src/gb-flamegraph.js"
   },
   "author": "Chris Maltby",
   "license": "MIT",

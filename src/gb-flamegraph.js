@@ -9,8 +9,8 @@ const GameboyJS = require("./gameboy");
 const CYCLES_PER_FRAME = 70256;
 
 program
-  .name("gbvm-benchmark")
-  .description("A CLI tool for benchmarking GBVM")
+  .name("gb-flamegraph")
+  .description("A tool for creating flame graphs from Game Boy ROMs")
   .requiredOption("-r, --rom <filename>", "Path to the ROM file")
   .option("-i, --input <inputfile>", "Path to the input file")
   .option("-e, --export <filename>", "Path to export results to")
